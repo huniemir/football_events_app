@@ -9,8 +9,8 @@ class StatisticsApiCest
     public function _before(ApiTester $I)
     {
         // Clean up storage files before each test
-        $I->deleteFile('storage/events.txt');
-        $I->deleteFile('storage/statistics.txt');
+        $I->deleteFile('storage/events.json');
+        $I->deleteFile('storage/statistics.json');
     }
 
     public function testGetTeamStatistics(ApiTester $I)
@@ -124,6 +124,80 @@ class StatisticsApiCest
         $I->seeResponseContainsJson([
             'match_id' => 'nonexistent',
             'statistics' => []
+        ]);
+    }
+
+    public function testManyFoulEventsForTeam(ApiTester $I)
+    {
+        $foulsAmount = 30;
+
+        for($i=0;$i<$foulsAmount;$i++){
+            $I->haveHttpHeader('Content-Type', 'application/json');
+            $I->sendPOST('/event', [
+                'type' => 'foul',
+                'player' => 'William Saliba',
+                'team_id' => 'arsenal',
+                'match_id' => 'm1',
+                'minute' => 45,
+                'second' => 34
+            ]);
+        }
+        
+        // Now get team statistics
+        $I->sendGET('/statistics?match_id=m1&team_id=arsenal');
+        
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'match_id' => 'm1',
+            'team_id' => 'arsenal',
+            'statistics' => [
+                'fouls' => $foulsAmount
+            ]
+        ]);
+    }
+
+    public function testManyFoulEventsForMatch(ApiTester $I)
+    {
+        $foulsAmount = 30;
+
+        for($i=0;$i<$foulsAmount;$i++){
+            $I->haveHttpHeader('Content-Type', 'application/json');
+            $I->sendPOST('/event', [
+                'type' => 'foul',
+                'player' => 'William Saliba',
+                'team_id' => 'arsenal',
+                'match_id' => 'm1',
+                'minute' => 45,
+                'second' => 34
+            ]);
+
+            $I->haveHttpHeader('Content-Type', 'application/json');
+            $I->sendPOST('/event', [
+                'type' => 'foul',
+                'player' => 'Virgil van Dijk',
+                'team_id' => 'liverpool',
+                'match_id' => 'm1',
+                'minute' => 30,
+                'second' => 33
+            ]);
+        }
+        
+        // Get all match statistics
+        $I->sendGET('/statistics?match_id=m1');
+        
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'match_id' => 'm1',
+            'statistics' => [
+                'arsenal' => [
+                    'fouls' => $foulsAmount
+                ],
+                'liverpool' => [
+                    'fouls' => $foulsAmount
+                ]
+            ]
         ]);
     }
 }

@@ -20,8 +20,11 @@ class StatisticsManager
     
     public function updateTeamStatistics(string $matchId, string $teamId, string $statType, int $value = 1): void
     {
-        $stats = $this->getStatistics();
-        
+        $fp = fopen($this->statsFile, 'c+');
+        flock($fp, LOCK_EX);
+
+        $stats = json_decode(stream_get_contents($fp), true) ?? [];
+
         if (!isset($stats[$matchId])) {
             $stats[$matchId] = [];
         }
@@ -35,8 +38,14 @@ class StatisticsManager
         }
         
         $stats[$matchId][$teamId][$statType] += $value;
+
+        $tmpFile = $this->statsFile . '.tmp';
+
+        file_put_contents($tmpFile, json_encode($stats, JSON_PRETTY_PRINT));
+        rename($tmpFile, $this->statsFile);
         
-        $this->saveStatistics($stats);
+        flock($fp, LOCK_UN);
+        fclose($fp);
     }
     
     public function getTeamStatistics(string $matchId, string $teamId): array

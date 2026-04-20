@@ -9,8 +9,8 @@ class EventApiCest
     public function _before(ApiTester $I)
     {
         // Clean up storage files before each test
-        $I->deleteFile('storage/events.txt');
-        $I->deleteFile('storage/statistics.txt');
+        $I->deleteFile('storage/events.json');
+        $I->deleteFile('storage/statistics.json');
     }
 
     public function testFoulEvent(ApiTester $I)

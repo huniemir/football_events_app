@@ -7,6 +7,8 @@ use App\StatisticsManager;
 
 header('Content-Type: application/json');
 
+$config = require __DIR__ . '/../config/config.php';
+
 // Simple routing
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -21,7 +23,7 @@ if ($method === 'POST' && $path === '/event') {
         exit;
     }
     
-    $handler = new EventHandler(__DIR__ . '/../storage/events.txt');
+    $handler = new EventHandler($config['storageEvents']);
     
     try {
         $result = $handler->handleEvent($data);
@@ -32,7 +34,7 @@ if ($method === 'POST' && $path === '/event') {
         echo json_encode(['error' => $e->getMessage()]);
     }
 } elseif ($method === 'GET' && $path === '/statistics') {
-    $statsManager = new StatisticsManager(__DIR__ . '/../storage/statistics.txt');
+    $statsManager = new StatisticsManager($config['storageStatistics']);
     
     $matchId = $_GET['match_id'] ?? null;
     $teamId = $_GET['team_id'] ?? null;

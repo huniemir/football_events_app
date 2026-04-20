@@ -6,11 +6,13 @@ class EventHandler
 {
     private FileStorage $storage;
     private StatisticsManager $statisticsManager;
+    private array $config;
     
     public function __construct(string $storagePath, ?StatisticsManager $statisticsManager = null)
     {
+        $this->config = require __DIR__ . '/../config/config.php';
         $this->storage = new FileStorage($storagePath);
-        $this->statisticsManager = $statisticsManager ?? new StatisticsManager(__DIR__ . '/../storage/statistics.txt');
+        $this->statisticsManager = $statisticsManager ?? new StatisticsManager($this->config['storageStatistics']);
     }
     
     public function handleEvent(array $data): array
