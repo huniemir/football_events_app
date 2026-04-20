@@ -19,7 +19,7 @@ class StatisticsApiCest
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/event', [
             'type' => 'foul',
-            'player' => 'William Saliba',
+            'affected_player' => 'William Saliba',
             'team_id' => 'arsenal',
             'match_id' => 'm1',
             'minute' => 15,
@@ -29,7 +29,7 @@ class StatisticsApiCest
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/event', [
             'type' => 'foul',
-            'player' => 'Gabriel Jesus',
+            'affected_player' => 'Gabriel Jesus',
             'team_id' => 'arsenal',
             'match_id' => 'm1',
             'minute' => 30,
@@ -56,7 +56,7 @@ class StatisticsApiCest
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/event', [
             'type' => 'foul',
-            'player' => 'William Saliba',
+            'affected_player' => 'William Saliba',
             'team_id' => 'arsenal',
             'match_id' => 'm1',
             'minute' => 15,
@@ -66,7 +66,7 @@ class StatisticsApiCest
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/event', [
             'type' => 'foul',
-            'player' => 'Virgil van Dijk',
+            'affected_player' => 'Virgil van Dijk',
             'team_id' => 'liverpool',
             'match_id' => 'm1',
             'minute' => 30,
@@ -135,7 +135,7 @@ class StatisticsApiCest
             $I->haveHttpHeader('Content-Type', 'application/json');
             $I->sendPOST('/event', [
                 'type' => 'foul',
-                'player' => 'William Saliba',
+                'affected_player' => 'William Saliba',
                 'team_id' => 'arsenal',
                 'match_id' => 'm1',
                 'minute' => 45,
@@ -165,7 +165,7 @@ class StatisticsApiCest
             $I->haveHttpHeader('Content-Type', 'application/json');
             $I->sendPOST('/event', [
                 'type' => 'foul',
-                'player' => 'William Saliba',
+                'affected_player' => 'William Saliba',
                 'team_id' => 'arsenal',
                 'match_id' => 'm1',
                 'minute' => 45,
@@ -175,7 +175,7 @@ class StatisticsApiCest
             $I->haveHttpHeader('Content-Type', 'application/json');
             $I->sendPOST('/event', [
                 'type' => 'foul',
-                'player' => 'Virgil van Dijk',
+                'affected_player' => 'Virgil van Dijk',
                 'team_id' => 'liverpool',
                 'match_id' => 'm1',
                 'minute' => 30,

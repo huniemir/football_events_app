@@ -7,7 +7,7 @@ class StatisticsManager
     private FileStorage $storage;
     private string $statsFile;
     
-    public function __construct(string $statsFile = '../storage/statistics.txt')
+    public function __construct(string $statsFile = '../storage/statistics.json')
     {
         $this->storage = new FileStorage($statsFile);
         $this->statsFile = $statsFile;

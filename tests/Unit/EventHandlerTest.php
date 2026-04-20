@@ -34,7 +34,9 @@ class EventHandlerTest extends TestCase
         
         $eventData = [
             'type' => 'goal',
-            'player' => 'John Doe',
+            'scorer' => 'John Doe',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1',
             'minute' => 23,
             'second' => 34
         ];
@@ -63,7 +65,9 @@ class EventHandlerTest extends TestCase
         
         $eventData = [
             'type' => 'goal',
-            'player' => 'Jane Smith'
+            'player' => 'Jane Smith',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1'
         ];
         
         $handler->handleEvent($eventData);
@@ -134,7 +138,7 @@ class EventHandlerTest extends TestCase
     public function testHandleFoulEventWithoutRequiredFields(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('match_id and team_id are required for foul events');
+        $this->expectExceptionMessage('match_id and team_id are required for all supported events');
         
         $statisticsManager = new StatisticsManager($this->testStatsFile);
         $handler = new EventHandler($this->testFile, $statisticsManager);

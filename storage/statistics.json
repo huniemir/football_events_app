@@ -1,7 +1,8 @@
 {
     "m1": {
         "arsenal": {
-            "fouls": 30
+            "fouls": 30,
+            "goals": 2
         },
         "liverpool": {
             "fouls": 30
