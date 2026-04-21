@@ -47,7 +47,7 @@ class EventHandler
         }
         if(isset($data['second'])){
             $second = filter_var($data['second'], FILTER_VALIDATE_INT);
-            if(!($second < 60 && $second >= 0)){
+            if($second === false ||!($second < 60 && $second >= 0)){
                 throw new \InvalidArgumentException('Invalid second value');
             }
             $validatedData['second'] = $second;

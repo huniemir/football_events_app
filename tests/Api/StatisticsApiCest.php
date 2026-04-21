@@ -35,6 +35,16 @@ class StatisticsApiCest
             'minute' => 30,
             'second' => 33
         ]);
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/event', [
+            'type' => 'goal',
+            'scorer' => 'Gabriel Jesus',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1',
+            'minute' => 30,
+            'second' => 33
+        ]);
         
         // Now get team statistics
         $I->sendGET('/statistics?match_id=m1&team_id=arsenal');
@@ -45,7 +55,8 @@ class StatisticsApiCest
             'match_id' => 'm1',
             'team_id' => 'arsenal',
             'statistics' => [
-                'fouls' => 2
+                'fouls' => 2,
+                'goals' => 1
             ]
         ]);
     }
@@ -72,6 +83,15 @@ class StatisticsApiCest
             'minute' => 30,
             'second' => 33
         ]);
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/event', [
+            'type' => 'goal',
+            'scorer' => 'Gabriel Jesus',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1',
+            'minute' => 30,
+            'second' => 33
+        ]);
         
         // Get all match statistics
         $I->sendGET('/statistics?match_id=m1');
@@ -82,7 +102,8 @@ class StatisticsApiCest
             'match_id' => 'm1',
             'statistics' => [
                 'arsenal' => [
-                    'fouls' => 1
+                    'fouls' => 1,
+                    'goals' => 1
                 ],
                 'liverpool' => [
                     'fouls' => 1
