@@ -1,11 +1,9 @@
 {
     "m1": {
+        "last_update": 1776764452,
         "arsenal": {
-            "fouls": 30,
+            "fouls": 2,
             "goals": 2
-        },
-        "liverpool": {
-            "fouls": 30
         }
     }
 }

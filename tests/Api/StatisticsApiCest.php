@@ -221,4 +221,74 @@ class StatisticsApiCest
             ]
         ]);
     }
+
+    public function testUserNotification(ApiTester $I){
+        $firstLastUpdate = 0;
+        $secondLastUpdate = 0;
+
+        //First event
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/event', [
+            'type' => 'foul',
+            'affected_player' => 'William Saliba',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1',
+            'minute' => 15,
+            'second' => 34
+        ]);
+
+        // Get all match statistics
+        $I->sendGET('/statistics?match_id=m1');
+        
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'match_id' => 'm1',
+            'statistics' => [
+                'arsenal' => [
+                    'fouls' => 1,
+                ]
+            ]
+        ]);
+
+        $response = json_decode($I->grabResponse(), true);
+        $firstLastUpdate = $response['last_update'];
+
+        //wait 1 second
+        sleep(1);
+
+        //Second event
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/event', [
+            'type' => 'goal',
+            'affected_player' => 'William Saliba',
+            'team_id' => 'arsenal',
+            'match_id' => 'm1',
+            'minute' => 15,
+            'second' => 34
+        ]);
+
+        // Get all match statistics
+        $I->sendGET('/statistics?match_id=m1');
+        
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'match_id' => 'm1',
+            'statistics' => [
+                'arsenal' => [
+                    'fouls' => 1,
+                    'goals' => 1
+                ]
+            ]
+        ]);
+
+        $response = json_decode($I->grabResponse(), true);
+        $secondLastUpdate = $response['last_update'];
+
+        $I->assertTrue($secondLastUpdate > $firstLastUpdate);
+    }    
+        
+
+
 }

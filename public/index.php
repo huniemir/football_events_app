@@ -42,18 +42,22 @@ if ($method === 'POST' && $path === '/event') {
     try {
         if ($matchId && $teamId) {
             // Get team statistics for specific match
-            $stats = $statsManager->getTeamStatistics($matchId, $teamId);
+            $statsData = $statsManager->getTeamStatistics($matchId, $teamId);
+
             echo json_encode([
+                'last_update' => $statsData['last_update'],
                 'match_id' => $matchId,
                 'team_id' => $teamId,
-                'statistics' => $stats
+                'statistics' => $statsData['stats']
             ]);
         } elseif ($matchId) {
             // Get all team statistics for specific match
-            $stats = $statsManager->getMatchStatistics($matchId);
+            $statsData = $statsManager->getMatchStatistics($matchId);
+
             echo json_encode([
+                'last_update' => $statsData['last_update'],
                 'match_id' => $matchId,
-                'statistics' => $stats
+                'statistics' => $statsData['stats']
             ]);
         } else {
             http_response_code(400);

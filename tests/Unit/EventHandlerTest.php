@@ -65,7 +65,7 @@ class EventHandlerTest extends TestCase
         
         $eventData = [
             'type' => 'goal',
-            'player' => 'Jane Smith',
+            'scorer' => 'Jane Smith',
             'team_id' => 'arsenal',
             'match_id' => 'm1'
         ];
@@ -85,7 +85,7 @@ class EventHandlerTest extends TestCase
         
         $eventData = [
             'type' => 'foul',
-            'player' => 'William Saliba',
+            'affected_player' => 'William Saliba',
             'team_id' => 'arsenal',
             'match_id' => 'm1',
             'minute' => 45,
@@ -100,8 +100,8 @@ class EventHandlerTest extends TestCase
         
         // Check that statistics were updated
         $teamStats = $statisticsManager->getTeamStatistics('m1', 'arsenal');
-        $this->assertArrayHasKey('fouls', $teamStats);
-        $this->assertEquals(1, $teamStats['fouls']);
+        $this->assertArrayHasKey('fouls', $teamStats['stats']);
+        $this->assertEquals(1, $teamStats['stats']['fouls']);
     }
     
     public function testHandleMultipleFoulEventsIncrementsStatistics(): void
@@ -111,7 +111,7 @@ class EventHandlerTest extends TestCase
         
         $eventData1 = [
             'type' => 'foul',
-            'player' => 'John Doe',
+            'affected_player' => 'John Doe',
             'team_id' => 'team_a',
             'match_id' => 'match_1',
             'minute' => 15,
@@ -120,7 +120,7 @@ class EventHandlerTest extends TestCase
         
         $eventData2 = [
             'type' => 'foul',
-            'player' => 'Jane Smith',
+            'affected_player' => 'Jane Smith',
             'team_id' => 'team_a',
             'match_id' => 'match_1',
             'minute' => 30,
@@ -132,7 +132,7 @@ class EventHandlerTest extends TestCase
         
         // Check that statistics were incremented correctly
         $teamStats = $statisticsManager->getTeamStatistics('match_1', 'team_a');
-        $this->assertEquals(2, $teamStats['fouls']);
+        $this->assertEquals(2, $teamStats['stats']['fouls']);
     }
     
     public function testHandleFoulEventWithoutRequiredFields(): void
@@ -145,7 +145,7 @@ class EventHandlerTest extends TestCase
         
         $eventData = [
             'type' => 'foul',
-            'player' => 'John Doe',
+            'affected_player' => 'John Doe',
             'minute' => 45,
             'second' => 34
             // Missing match_id and team_id

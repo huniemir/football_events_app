@@ -25,6 +25,10 @@ class StatisticsManager
 
         $stats = json_decode(stream_get_contents($fp), true) ?? [];
 
+        if (!isset($stats[$matchId]['last_update'])) {
+            $stats[$matchId]['last_update'] = 0;
+        }
+
         if (!isset($stats[$matchId])) {
             $stats[$matchId] = [];
         }
@@ -37,8 +41,9 @@ class StatisticsManager
             $stats[$matchId][$teamId][$statType] = 0;
         }
         
+        $stats[$matchId]['last_update'] = time();
         $stats[$matchId][$teamId][$statType] += $value;
-
+        
         $tmpFile = $this->statsFile . '.tmp';
 
         file_put_contents($tmpFile, json_encode($stats, JSON_PRETTY_PRINT));
@@ -51,13 +56,20 @@ class StatisticsManager
     public function getTeamStatistics(string $matchId, string $teamId): array
     {
         $stats = $this->getStatistics();
-        return $stats[$matchId][$teamId] ?? [];
+        $teamStats = $stats[$matchId][$teamId] ?? [];
+        $lastUpdate = $stats[$matchId]['last_update'] ?? 0;
+
+        return ['last_update' => $lastUpdate, 'stats' => $teamStats];
     }
     
     public function getMatchStatistics(string $matchId): array
     {
         $stats = $this->getStatistics();
-        return $stats[$matchId] ?? [];
+        $matchStats = $stats[$matchId] ?? [];
+        $lastUpdate = $stats[$matchId]['last_update'] ?? 0;
+        unset($matchStats['last_update']);
+
+        return ['last_update' => $lastUpdate, 'stats' => $matchStats];
     }
     
     private function getStatistics(): array
