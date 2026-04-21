@@ -16,5 +16,6 @@ In this task, I focused primarily on improving the quality of event processing a
 ## Further development plans for the application:
 - Introducing real-time communication via SSE or Websocket to improve communication optimization.
 - Moving the saving and reading of statistics to Redis to optimize reading.
-- Introducing the ability to rebuild (recover) statistics based on event history. - Further upgrade the project structure, e.g., by embedding it in an MVC framework (Laravel/Symfony)
+- Introducing the ability to rebuild (recover) statistics based on event history.
+- Further upgrade the project structure, e.g., by embedding it in an MVC framework (Laravel/Symfony)
 - Introducing the ability to save and read events from MySQL for improved data persistence
